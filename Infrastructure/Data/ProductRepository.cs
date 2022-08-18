@@ -13,10 +13,22 @@ namespace Infrastructure.Data
             _context = context;
         }
 
+        public async Task<IReadOnlyList<Product>> GetProductsAsync()
+        {
+            // This doesn't execute against the database until we execute the ToListAsync.
+            // ToListAsync(): this is when the query goes to database and executes whatever's in these expressions.
+            return await _context.Products
+                .Include(p => p.ProductType)
+                .Include(p => p.ProductBrand)
+                .ToListAsync();
+        }
+
+
         public async Task<IReadOnlyList<ProductBrand>> GetProductBrandsAsync()
         {
             return await _context.ProductBrands.ToListAsync();
         }
+
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
@@ -26,13 +38,6 @@ namespace Infrastructure.Data
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<IReadOnlyList<Product>> GetProductsAsync()
-        {
-            return await _context.Products
-                .Include(p => p.ProductType)
-                .Include(p => p.ProductBrand)
-                .ToListAsync();
-        }
 
         public async Task<IReadOnlyList<ProductType>> GetProductTypesAsync()
         {
