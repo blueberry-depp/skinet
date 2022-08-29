@@ -21,10 +21,21 @@ namespace Core.Specifications
             Criteria = criteria;
         }
 
-        public Expression<Func<T, bool>> Criteria { get; } 
+        public Expression<Func<T, bool>> Criteria { get; }
 
         // Set to empty list or include list.
         public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
+
+        // Add the private set because we'll set what this is inside this particular class(OrderBy).
+        public Expression<Func<T, object>> OrderBy { get; private set; }
+
+        public Expression<Func<T, object>> OrderByDescending { get; private set; }
+
+        public int Take { get; private set; }
+
+        public int Skip { get; private set; }
+
+        public bool IsPagingEnabled { get; private set; }
 
         // Create a method that will allow us to adds include statements to our include list which is a list of expressions.
         // "protected" means that we can access the method that we're about to create in BaseSpecification class itself and
@@ -36,5 +47,28 @@ namespace Core.Specifications
             Includes.Add(includeExpression);
         }
 
+        // These methods need to be evaluated by specification evaluators.
+        protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+        {
+            OrderBy = orderByExpression;
+        }
+
+        protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
+        {
+            OrderByDescending = orderByDescendingExpression;
+        }
+
+        // Create methods to set the properties above(Take, Skip, IsPagingEnabled).
+        protected void ApplyPaging(int skip, int take) 
+        {
+            Skip = skip;
+            Take = take;
+            // Use this property inside SpecificationEvaluator so that we know whether or not to page the results.
+            IsPagingEnabled = true;
+        }
+
     }
+
+
+
 }

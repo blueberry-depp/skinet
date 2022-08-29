@@ -1,5 +1,6 @@
 ﻿using API.Dtos;
 using API.Errors;
+using API.Helpers;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
@@ -24,18 +25,32 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
+        // Pass the "string sort" to specification class.
+        // int? brandId: is optional.
+        // [FromQuery]: look for these properties in the query string.
+        // Return the pagination class.
+        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery] ProductParamsSpecification productParams)
         {
-            var spec = new ProductsWithTypesAndBrandsSpecification();
+            // We need to configure specification to accommodate this "string sort".
+            var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
+
+            var countSpec = new ProductWithFiltersForCountSpecification(productParams);
+
+            var totalItems = await _productsRepo.CountAsync(countSpec);
 
             var products = await _productsRepo.ListAsync(spec);
+
             // List cannot return directyly.
             // ToList(): this is not running against database. We've got our products in memory at this point. And what we're doing
             // is we're selecting them in memory and then we're returning it to a list in memory. Nothing we're doing at
             // this point is hitting the database at all, that's taking place in this particular method(ListAsync).
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
+          
+            return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, data));
         }
+
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)] // For swagger.

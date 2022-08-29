@@ -48,15 +48,24 @@ namespace Infrastructure.Data
             return await ApplySpecification(spec).ToListAsync();
         }
 
+
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            // Count the results.
+            return await ApplySpecification(spec).CountAsync();
+        }
+
+
         // We're going to hit GetQuery method in the SpecificationEvaluator and this job of this method is
         // to return us and IQueryable and we're passing the DB sets(_context.Set<T>()) which is gonna to be the product DB sets
         // and we're also passing the specification(spec) to SpecificationEvaluator.
-
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
             // Set: set the type of entity.
             // Returning specification which is now IQueryable.
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
+
+     
     }
 }

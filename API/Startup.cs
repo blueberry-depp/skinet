@@ -21,6 +21,10 @@ namespace API
         {
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddControllers();
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            });
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
             services.AddAplicationServices();
             services.AddSwaggerDocumentation();
@@ -28,7 +32,7 @@ namespace API
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         // This is for adding middleware
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) 
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // Regardless of which we're running in, we're just going to use our middleware.
             app.UseMiddleware<ExceptionMiddleware>();
@@ -37,7 +41,7 @@ namespace API
 
             if (env.IsDevelopment())
             {
-              
+
             }
 
             // In the event that request comes into API server but we don't have an end point that matches that particular request
@@ -51,6 +55,8 @@ namespace API
 
             app.UseRouting();
             app.UseStaticFiles();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 

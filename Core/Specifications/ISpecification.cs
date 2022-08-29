@@ -15,5 +15,14 @@ namespace Core.Specifications
         Expression<Func<T, bool>> Criteria { get; }
         // This is for include operation.
         List<Expression<Func<T, object>>> Includes { get; }
+        Expression<Func<T, object>> OrderBy { get; }
+        Expression<Func<T, object>> OrderByDescending { get; }
+        // Take a certain amount of records or certain amount of products.
+        int Take { get; }
+        // Skip a certain amount of records or certain amount of products.
+        int Skip { get; }
+        bool IsPagingEnabled { get; }
+
+
     }
 }
