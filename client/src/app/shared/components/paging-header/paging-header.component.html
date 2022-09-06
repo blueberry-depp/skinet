@@ -1,0 +1,15 @@
+<header>
+  <!-- this is just a bit of safety a little bit of defensive coding just to make sure that the total count
+  we have available before we try and evaluate to see if it's greater than zero because the total count is
+  coming back from API and we've got no guarantee that we know what this is when we load our component. -->
+  <span *ngIf="totalCount && totalCount > 0">Showing
+            <strong>
+              {{(pageNumber - 1) * pageSize + 1}} -
+              <!-- Check  to see if the results of this is greater than the total count. -->
+              {{pageNumber * pageSize > totalCount
+              ? totalCount : pageNumber * pageSize
+              }}
+            </strong> of <strong></strong> Results
+          </span>
+  <span>There are <strong>{{totalCount}}</strong> results for this filter</span>
+</header>

@@ -1,0 +1,74 @@
+<div class="container mt-3">
+  <div class="row">
+
+    <section class="col-3">
+      <ng-container>
+        <h5 class="text-warning ml-3 mt-4 mb-3">Sort</h5>
+        <select class="custom-select mb-4" (change)="onSortSelected($event.target.value)">
+          <option *ngFor="let sort of sortOptions"
+                  [value]="sort.value">{{sort.name}}</option>
+        </select>
+
+        <h5 class="text-warning ml-3">Brands</h5>
+        <ul class="list-group my-3">
+          <!-- [class.active] allows us to assign an expression to this. -->
+          <!-- [value] is the value that we want to pass up to our server. -->
+          <!-- When we want to do something, it's surrounded in parentheses(((click)). -->
+          <!-- When receive something, it's surrounded in bracket([class.active]). -->
+          <li class="list-group-item"
+              *ngFor="let brand of brands"
+              [class.active]="brand.id === this.shopParams.brandId"
+              [value]="brand.id"
+              (click)="onBrandSelected(brand.id)">
+            {{brand.name}}
+          </li>
+        </ul>
+        <h5 class="text-warning ml-3">Types</h5>
+        <ul class="list-group my-3">
+          <li class="list-group-item" *ngFor="let type of types"
+              [class.active]="type.id === this.shopParams.typeId"
+              [value]="type.id"
+              (click)="onTypeSelected(type.id)">
+            {{type.name}}
+          </li>
+        </ul>
+      </ng-container>
+    </section>
+
+    <section class="col-9">
+      <div class="d-flex justify-content-between align-items-center pb-2">
+        <!-- Pass it the parameters it needs and these are all going to be input properties. -->
+        <app-paging-header
+          [pageNumber]="shopParams.pageNumber"
+          [pageSize]="shopParams.pageSize"
+          [totalCount]="totalCount">
+        </app-paging-header>
+
+        <div class="d-flex flex-row align-items-center flex-wrap mr-2" *ngIf="products">
+          <!-- We can get access to this input element from component by give this a template reference variable(#search) -->
+          <input (keyup.enter)="onSearch()" #search class="form-control mr-2" style="width: 300px" placeholder="Search" type="text">
+          <button (click)="onSearch()" class="btn btn-outline-primary my-2">Search</button>
+          <button (click)="onReset()" class="btn btn-outline-success ml-2 my-2">Reset</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4 mb-4" *ngFor="let item of products">
+          <!-- Pass down the product to the product item, [product] is input property -->
+          <app-product-item [product]="item"></app-product-item>
+        </div>
+      </div>
+
+      <div *ngIf="totalCount > 0" class="d-flex justify-content-center">
+        <app-pager
+          [pageSize]="shopParams.pageSize"
+          [totalCount]="totalCount"
+          (pageChanged)="onPageChanged($event)"
+        ></app-pager>
+      </div>
+
+    </section>
+
+  </div>
+</div>
+

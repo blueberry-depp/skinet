@@ -1,0 +1,8 @@
+<!--$event: the event that's emitted from this particular component -->
+<pagination [boundaryLinks]="true"
+            [totalItems]="totalCount"
+            [itemsPerPage]="pageSize"
+            (pageChanged)="onPagerChange($event)"
+            previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+
+</pagination>
