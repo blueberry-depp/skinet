@@ -1,5 +1,8 @@
 <app-nav-bar></app-nav-bar>
 <h1>Welcome to {{title}}</h1>
-<div class="container mt-5"><app-shop></app-shop>
+<div class="container mt-5">
+  <!-- Activated roots component. So as soon as we browse to a page in our roots it's going to load up that components
+  and replace <router-outlet> with the component that we're loading.  -->
+  <router-outlet></router-outlet>
 </div>
 

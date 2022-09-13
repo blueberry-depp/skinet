@@ -3,13 +3,13 @@
 
     <section class="col-3">
       <ng-container>
-        <h5 class="text-warning ml-3 mt-4 mb-3">Sort</h5>
+        <h5 class="text-warning ms-3 mt-4 mb-3">Sort</h5>
         <select class="custom-select mb-4" (change)="onSortSelected($event.target.value)">
           <option *ngFor="let sort of sortOptions"
                   [value]="sort.value">{{sort.name}}</option>
         </select>
 
-        <h5 class="text-warning ml-3">Brands</h5>
+        <h5 class="text-warning ms-3">Brands</h5>
         <ul class="list-group my-3">
           <!-- [class.active] allows us to assign an expression to this. -->
           <!-- [value] is the value that we want to pass up to our server. -->
@@ -23,7 +23,7 @@
             {{brand.name}}
           </li>
         </ul>
-        <h5 class="text-warning ml-3">Types</h5>
+        <h5 class="text-warning ms-3">Types</h5>
         <ul class="list-group my-3">
           <li class="list-group-item" *ngFor="let type of types"
               [class.active]="type.id === this.shopParams.typeId"
@@ -44,11 +44,11 @@
           [totalCount]="totalCount">
         </app-paging-header>
 
-        <div class="d-flex flex-row align-items-center flex-wrap mr-2" *ngIf="products">
+        <div class="d-flex flex-row align-items-center flex-wrap me-2" *ngIf="products">
           <!-- We can get access to this input element from component by give this a template reference variable(#search) -->
-          <input (keyup.enter)="onSearch()" #search class="form-control mr-2" style="width: 300px" placeholder="Search" type="text">
+          <input (keyup.enter)="onSearch()" #search class="form-control me-2" style="width: 300px" placeholder="Search" type="text">
           <button (click)="onSearch()" class="btn btn-outline-primary my-2">Search</button>
-          <button (click)="onReset()" class="btn btn-outline-success ml-2 my-2">Reset</button>
+          <button (click)="onReset()" class="btn btn-outline-success ms-2 my-2">Reset</button>
         </div>
       </div>
 
