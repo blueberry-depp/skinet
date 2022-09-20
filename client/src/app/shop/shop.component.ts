@@ -13,7 +13,8 @@ import {repeat} from "rxjs";
   styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
-  @ViewChild('search') searchTerm: ElementRef
+  // static: false: which means this element is going to appear after we have our products available.
+  @ViewChild('search', {static: false}) searchTerm: ElementRef
   products: IProduct[]
   brands: IBrand[]
   types: IType[]

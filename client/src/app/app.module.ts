@@ -8,6 +8,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {CoreModule} from "./core/core.module";
 import {HomeModule} from "./home/home.module";
 import {ErrorInterceptor} from "./core/interceptors/error.interceptor";
+import {NgxSpinnerModule} from "ngx-spinner";
+import {LoadingInterceptor} from "./core/interceptors/loading.interceptor";
 
 @NgModule({
   declarations: [
@@ -20,12 +22,15 @@ import {ErrorInterceptor} from "./core/interceptors/error.interceptor";
     BrowserAnimationsModule,
     HttpClientModule,
     CoreModule,
-    HomeModule
+    HomeModule,
+    NgxSpinnerModule
 
   ],
   providers: [
     // set this to multi: true so that ours isn't the only http interceptor in that list, it's got the ones that come with angular as well.
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
+
 
   ],
   bootstrap: [AppComponent]
