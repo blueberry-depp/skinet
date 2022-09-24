@@ -29,5 +29,7 @@ git add .
 git commit -m "End of section 4"
 git push -u origin master
 
+docker-compose down --rmi all
+
 
 

@@ -3,6 +3,7 @@ using Infrastructure.Data;
 using API.Helpers;
 using API.Middleware;
 using API.Extensions;
+using StackExchange.Redis;
 
 namespace API
 {
@@ -26,6 +27,12 @@ namespace API
                 opt.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
             });
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                // true: ignore any unknown configuration.
+                var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(configuration);
+            });
             services.AddAplicationServices();
             services.AddSwaggerDocumentation();
         }

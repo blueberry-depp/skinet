@@ -20,6 +20,8 @@ namespace API.Extensions
             // AddScoped: When request is finished then it disposes of both contoller and the repository
             services.AddScoped<IProductRepository, ProductRepository>();
 
+            services.AddScoped<IBasketRepository, BasketRepository>();
+
             // Setup for generic repository.
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
 
