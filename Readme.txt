@@ -31,5 +31,7 @@ git push -u origin master
 
 docker-compose down --rmi all
 
+git rm dump.rdb
+
 
 

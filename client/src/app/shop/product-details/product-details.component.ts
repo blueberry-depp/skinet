@@ -3,6 +3,7 @@ import {IProduct} from "../../shared/models/product";
 import {ShopService} from "../shop.service";
 import {ActivatedRoute} from "@angular/router";
 import {BreadcrumbService} from "xng-breadcrumb";
+import {BasketService} from "../../basket/basket.service";
 
 @Component({
   selector: 'app-product-details',
@@ -17,13 +18,26 @@ export class ProductDetailsComponent implements OnInit {
     private shopService: ShopService,
     // To get access to root parameter here, we need to inject something from the router module and it is the activated root.
     private activateRoute: ActivatedRoute,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private basketService: BasketService
 ) {
     this.breadcrumbService.set('@productDetails', ' ')
   }
 
   ngOnInit(): void {
     this.loadProduct()
+  }
+
+  addItemToBasket() {
+    this.basketService.addItemToBasket(this.product, this.quantity)
+  }
+
+  decrementQuantity() {
+    if (this.quantity > 1) this.quantity--
+  }
+
+  incrementQuantity() {
+    this.quantity++
   }
 
   loadProduct() {
