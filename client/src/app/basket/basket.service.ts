@@ -12,7 +12,7 @@ export class BasketService {
   baseUrl = environment.apiUrl;
 
   // We need access to basket information inside the basket icon top here for the shopping cart. This is going to need to display
-  // the number of items. We're also going to need basket information  basket component and there's going to be other areas we need
+  // the number of items. We're also going to need basket information basket component and there's going to be other areas we need
   // the information inside the basket as well, and what we're going to do is we're going to create a private property.
   // new BehaviorSubject(): which is a variant of subject which is an observable that requires an initial value. And emit its current
   // value whenever it is subscribed to. So we're going to be able to subscribe to this and because it's a

@@ -3,6 +3,7 @@ using Infrastructure.Data;
 using API.Helpers;
 using API.Middleware;
 using API.Extensions;
+using Infrastructure.Identity;
 using StackExchange.Redis;
 
 namespace API
@@ -27,6 +28,11 @@ namespace API
                 opt.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
             });
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+
+            // We're creating a new database here which is why we're specifying a separate service for this. We're having a completely
+            // separate database for identity it's going to be a physical contact boundary between our own application database and the identity database.
+            services.AddDbContext<AppIdentityDbContext>(x => x.UseSqlite(_config.GetConnectionString("IdentityConnection")));
+
             services.AddSingleton<IConnectionMultiplexer>(c =>
             {
                 // true: ignore any unknown configuration.
@@ -34,6 +40,7 @@ namespace API
                 return ConnectionMultiplexer.Connect(configuration);
             });
             services.AddAplicationServices();
+            services.AddIdentityServices(_config);
             services.AddSwaggerDocumentation();
         }
 
@@ -64,6 +71,9 @@ namespace API
             app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
+
+            // This comes directly before the middleware to use authorization, if we add it afterwards then we're going to have a problem.
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

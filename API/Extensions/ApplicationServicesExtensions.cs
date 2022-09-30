@@ -1,13 +1,8 @@
-﻿/*using API.Data;
-using API.Helpers;
-using API.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using API.Services;
-using API.SignalR;*/
-using Core.Interfaces;
+﻿using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using API.Errors;
+using Infrastructure.Services;
 
 namespace API.Extensions
 {
@@ -17,6 +12,7 @@ namespace API.Extensions
         // To use or extend the IServiceCollection that we're going to be returning, we need to use 'this' keyword.
         public static IServiceCollection AddAplicationServices(this IServiceCollection services/*, IConfiguration config*/)
         {
+            services.AddScoped<ITokenService, TokenService>();
             // AddScoped: When request is finished then it disposes of both contoller and the repository
             services.AddScoped<IProductRepository, ProductRepository>();
 

@@ -14,10 +14,12 @@ namespace API.Controllers
         {
             _context = context;
         }
-
+        
+        // It's going to validate the signature. It's gonna validate the issuer. And if those checks passed then it's going to
+        // let the user see what's inside here.
         [Authorize]
-        [HttpGet("auth")]
-        public ActionResult<string> GetSecret()
+        [HttpGet("testauth")]
+        public ActionResult<string> GetSecretText()
         {
             return "secret text";
         }
