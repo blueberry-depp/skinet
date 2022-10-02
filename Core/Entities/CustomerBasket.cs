@@ -14,8 +14,8 @@ namespace Core.Entities
         {
         }
 
-        // Remove List<BasketItem> items in constructor because we're creating a new list
-        // when we initialize or create an instance of this class but we will take the id as a parameter in here.
+        // Remove List<BasketItem> items in constructor because we're creating a new list when we initialize
+        // or create an instance of this class but we will take the id as a parameter in here.
         public CustomerBasket(string id)
         {
             Id = id;

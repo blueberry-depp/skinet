@@ -144,6 +144,17 @@ public class AccountController : BaseApiController
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
+        // Check for the existence of an e-mail address at this level before it goes to UserManager then go to database, we'll catch that before then
+        // and we'll return one of validation errors so that we can tell the user that the email is already in use.
+        // Get the result.value because this is an async method
+        if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
+        {   
+            // Create new instance to return.
+            // Errors: create an errors object then finally pass the object
+            return new BadRequestObjectResult(new ApiValidationErrorResponse
+                { Errors = new[] { "Email address already use" }});
+        } 
+        
         var user = new AppUser
         {
             DisplayName = registerDto.DisplayName,

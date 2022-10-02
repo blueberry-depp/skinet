@@ -1,4 +1,6 @@
-﻿using Core.Entities;
+﻿using API.Dtos;
+using AutoMapper;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +16,13 @@ namespace API.Controllers
     public class BasketController : BaseApiController
     {
         private readonly IBasketRepository _basketRepository;
+        private readonly IMapper _mapper;
 
         // We give constructor so that we can inject basket repository.
-        public BasketController(IBasketRepository basketRepository)
+        public BasketController(IBasketRepository basketRepository, IMapper mapper)
         {
             _basketRepository = basketRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -33,11 +37,15 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasket basket)
+        // We're not validating the data going out of server. We're only concerned about the data coming into server in this case,
+        // so we use CustomerBasketDto
+        public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDto basket)
         {
-            var updatedBasket = await _basketRepository.UpdateBasketAsync(basket);
+            // We pass in the basket we receive as a parameter.
+            var customerBasket = _mapper.Map<CustomerBasketDto, CustomerBasket>(basket);
 
-            // Send them back updated basket.  
+            var updatedBasket = await _basketRepository.UpdateBasketAsync(customerBasket);
+
             return Ok(updatedBasket);
         }
 
