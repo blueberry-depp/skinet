@@ -1,0 +1,27 @@
+<div class="form-label-group">
+  <!-- (input): input event -->
+  <!-- (blur): blur event -->
+  <!-- #input: because we're accessing this from component we need to give it its template reference variable. -->
+  <!-- !controlDir.control.valid we apply 'is-invalid', is valid we apply 'is-valid' and if it's neither valid nor invalid then we apply nothing. -->
+  <input
+    [ngClass]="(controlDir && controlDir.control && controlDir.control.touched) ? !controlDir.control.valid ? 'is-invalid' : 'is-valid' : null"
+    [type]="type"
+    (input)="onChange($event.target.value)"
+    (blur)="onTouched()"
+    id="{{label}}"
+    #input
+    placeholder="{{label}}"
+    class="form-control">
+  <!-- Check the control status because when we're doing an asynchronous validation the control status is gonna be given a pending status. -->
+  <div *ngIf="controlDir && controlDir.control && controlDir.control.status === 'PENDING'" class="fa fa-spinner fa-spin loader"></div>
+  <label for="{{label}}">{{label}}</label>
+  <div class="invalid-feedback" *ngIf="controlDir && controlDir.control && !controlDir.control.valid && controlDir.control.touched">
+    <span *ngIf="controlDir.control.errors?.required">{{label}} is required</span>
+    <span *ngIf="controlDir.control.errors?.pattern">Invalid email address</span>
+    <span *ngIf="controlDir.control.errors?.isMatching">Passwords do not match</span>
+  </div>
+
+  <div class="invalid-feedback d-block" *ngIf="controlDir && controlDir.control && !controlDir.control.valid && controlDir.control.dirty">
+    <span *ngIf="controlDir.control.errors?.emailExists" >Email address is in use</span>
+  </div>
+</div>

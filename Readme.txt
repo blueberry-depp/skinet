@@ -11,9 +11,9 @@ dotnet sln add Core
 dotnet add refrerence Core/
 
 
-dotnet ef database drop -p Infrastructure -s API
+dotnet ef database drop -p Infrastructure -s API -c StoreContext 
 dotnet ef migrations remove -p Infrastructure -s API
-dotnet ef migrations add InitialCreate -p Infrastructure/ -s API/ -o Data/Migrations
+dotnet ef migrations add InitialCreate -p Infrastructure/ -s API/ -c StoreContext -o Data/Migrations
 
 dotnet ef database update
 
@@ -38,5 +38,15 @@ git rm dump.rdb
 which is the API, and we also need to specify the context as well. And we can use a switch called -c. 
 dotnet ef migrations add IdentityInitial -p Infrastructure/ -s API/ -c AppIdentityDbContext -o Identity/Migrations
 
+ng g m account
+ng g m account-routing --flat
+ng g s account --flat --skip-tests
+ng g c login --skip-tests
+ng g c register --skip-tests
+ng g g auth --skip-tests
 
+-p: project
+-s: startup project
+-c: context
+dotnet ef migrations add OrderEntityAdded -p Infrastructure/ -s API/ -c StoreContext 
 

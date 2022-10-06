@@ -55,6 +55,7 @@ public class AccountController : BaseApiController
         };
     }
 
+    
     // We've already seen that our API is going to reject any attempts to add a user with the same email that already exists inside our
     // user database but that's fine. This is not for our server. This is something that will allow our client to they actually attempt
     // to register the user. And this will be useful for async validation on the client side,
@@ -68,6 +69,7 @@ public class AccountController : BaseApiController
         return await _userManager.FindByEmailAsync(email) != null;
     }
 
+    
     // We authorize against. Because we're getting our user and will simply run into an error if we don't ask for authentication
     // and yet try and get a user out of the HttpContext because it won't be available, we authorize we're going to need
     // to get to the email address out of the HttpContext.
@@ -85,7 +87,7 @@ public class AccountController : BaseApiController
         // We don't have include method inside UserManager so we can extend UserManager functionality to allow us to include some things
         // such as the address. 
         // Get the user address.
-        var user = await _userManager.FindByUserClaimPrincipalWithAddressAsync(HttpContext.User);
+        var user = await _userManager.FindByUserClaimsPrincipalWithAddressAsync(HttpContext.User);
         
         // We got the issue object cycle was detected. So we must use AddressDto to solve this issue.
         return _mapper.Map<Address, AddressDto>(user.Address);
@@ -98,7 +100,7 @@ public class AccountController : BaseApiController
     // the address is just the navigation property on a user object.
     public async Task<ActionResult<AddressDto>> UpdateUserAddress(AddressDto address)
     {
-        var user = await _userManager.FindByUserClaimPrincipalWithAddressAsync(HttpContext.User);
+        var user = await _userManager.FindByUserClaimsPrincipalWithAddressAsync(HttpContext.User);
         
         // We can utilize automapper to update the properties in our user address, take the AddressDto/paramater/the body of request and map into Address.
         user.Address = _mapper.Map<AddressDto, Address>(address);

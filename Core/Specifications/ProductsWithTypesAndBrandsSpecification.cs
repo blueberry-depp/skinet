@@ -13,12 +13,11 @@ namespace Core.Specifications
         // base(): we can also use it for is to decide whether or not to send back the products of a specific brand or a specific type and
         // we use criteria for filter because criteria is where clause.
         public ProductsWithTypesAndBrandsSpecification(ProductParamsSpecification productParams)
-           
             : base(x =>
                 // Check to see if the string has a value, we're comparing like for like and use the Contains to see if it contains the search term.
                 (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
                 // Check to see brandId have value, if not have value, then we'll create a query get all of the products that match the brandId
-                // that we're passing paramater or execute the right condition.
+                // that we're passing parameter or execute the right condition.
                 (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) && 
                 (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId)
             )
@@ -48,7 +47,7 @@ namespace Core.Specifications
             }
         }
 
-        // base(criteria): is what we gonna change in BaseSpecification with paramater.
+        // base(criteria): is what we gonna change in BaseSpecification with parameter.
         // We create a new instance of this and we've built up our expressions we've replaced the generics with actual expressions.
         public ProductsWithTypesAndBrandsSpecification(int id) : base(x => x.Id == id)
         {

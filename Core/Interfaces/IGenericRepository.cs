@@ -19,6 +19,18 @@ namespace Core.Interfaces
         Task<T> GetEntityWithSpec(ISpecification<T> spec);
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
         Task<int> CountAsync(ISpecification<T> spec);
+        // We also need is some additional methods to support updating.
+        // T entity: as a type parameter.
+        // None of these asynchronous methods. And the reason for this is that we're not
+        // going to be directly adding these to the database when we use any of these methods 
+        // or we saying to entity framework when we use these method is we want to add this for example. So track it,
+        // and this is happening in memory, it's not happening in a sql or sqlite, etc, our repository is not responsible
+        // for saving changes to the database, that's left to unit of work.
+        void Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
+        
+
 
     }
 }

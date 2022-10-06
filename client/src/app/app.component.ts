@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BasketService} from "./basket/basket.service";
 import {logMessages} from "@angular-devkit/build-angular/src/builders/browser-esbuild/esbuild";
+import {AccountService} from "./account.service";
 
 @Component({
   selector: 'app-root',
@@ -14,12 +15,30 @@ export class AppComponent implements OnInit {
   // and what we want to do is when our application starts up, what we want to do is get our baskets and
   // we want to check to see if we've got the basket ID in local storage. And if we have, we'll go and fetch our basket from the API,
   // so a good place to do any initialization is in roots component for our application. And that's app component.
-  constructor(private basketService: BasketService
+  constructor(
+    private basketService: BasketService,
+    private accountService: AccountService
+
+
   ) {
   }
 
 
   ngOnInit(): void {
+    this.loadBasket()
+    this.loadCurrentUser()
+  }
+
+  // Use loadCurrentUser help method here to persist log in.
+  loadCurrentUser() {
+    const token = localStorage.getItem('token')
+    this.accountService.loadCurrentUser(token).subscribe({
+      next: () => console.log('loaded user'),
+      error: error => console.log(error)
+    })
+  }
+
+  loadBasket() {
     // Check inside local storage to see if we've got a basket, if we have get the basket ID from localstorage
     const basketId = localStorage.getItem('basket_id')
     if (basketId) {

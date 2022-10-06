@@ -13,7 +13,7 @@ import {LoadingInterceptor} from "./core/interceptors/loading.interceptor";
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   // We no longer need to add the shop module to the imports.
   imports: [

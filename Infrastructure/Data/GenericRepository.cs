@@ -19,7 +19,7 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public async Task<T?> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             // Set: set T which is going to be whatever it is we want to get.
             return await _context.Set<T>().FindAsync(id);
@@ -64,6 +64,35 @@ namespace Infrastructure.Data
             // Set: set the type of entity.
             // Returning specification which is now IQueryable.
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
+        }
+        
+        
+        // Now we can creating a new order, we can add the order and this is going to track it so that when we call a complete
+        // method inside units of work, it's going to save the entities that have been changed and tracked into database.
+        public void Add(T entity)
+        {
+            // Set the entity. Add method: do begins tracking the given entity and any other
+            // reachable entities that are not already being tracked
+            // in the Added state such that they will be inserted into the database when SaveChanges is called,
+            //There is async version of this method but we're not going to use it because we don't need it and
+            // the async method is available for using a particular generation strategy in Sequel Server.
+            _context.Set<T>().Add(entity);
+        }
+
+        public void Update(T entity)
+        {
+            // Attach this entity to be changed.
+            _context.Set<T>().Attach((entity));
+            // This marks the entity as modified in some way. And again because it's
+            // being tracked, it's going to be added to the list of things that need to be saved
+            // when SaveChanges async is called
+            _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void Delete(T entity)
+        {
+            _context.Set<T>().Remove((entity));
+
         }
 
      

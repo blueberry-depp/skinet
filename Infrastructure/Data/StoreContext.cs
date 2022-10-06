@@ -1,6 +1,8 @@
 ﻿using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Core.Entities.OrderAggregate;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Data;
 
@@ -10,9 +12,15 @@ public class StoreContext : DbContext
     {
     }
 
+    // Create a table in database.
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductType> ProductTypes { get; set; }
     public DbSet<ProductBrand> ProductBrands { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+
+
 
     // Overide the migrations method
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,11 +37,20 @@ public class StoreContext : DbContext
             {
                 // Where: because we want to find the property types using the decimal.
                 var properties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(decimal));
+                
+                // For Sqlite.
+                var dateTimeProperties = entityType.ClrType.GetProperties().Where(p => p.PropertyType == typeof(DateTimeOffset));
 
                 foreach (var property in properties)
                 {
-                    // Conver to double.
+                    // Convert to double.
                     modelBuilder.Entity(entityType.Name).Property(property.Name).HasConversion<double>();
+                }
+                
+                foreach (var property in dateTimeProperties)
+                {
+                    // Convert to double.
+                    modelBuilder.Entity(entityType.Name).Property(property.Name).HasConversion(new DateTimeOffsetToBinaryConverter());
                 }
             }
 

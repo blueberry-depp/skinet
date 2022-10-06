@@ -12,12 +12,13 @@ namespace API.Extensions
         // To use or extend the IServiceCollection that we're going to be returning, we need to use 'this' keyword.
         public static IServiceCollection AddAplicationServices(this IServiceCollection services/*, IConfiguration config*/)
         {
+            // AddScoped: When request is finished then it disposes of both controller and the repository.
+            // Make the service is available to be injected elsewhere.
             services.AddScoped<ITokenService, TokenService>();
-            // AddScoped: When request is finished then it disposes of both contoller and the repository
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductRepository, ProductRepository>();
-
             services.AddScoped<IBasketRepository, BasketRepository>();
-
             // Setup for generic repository.
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
 

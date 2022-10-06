@@ -5,6 +5,9 @@ import { PagingHeaderComponent } from './components/paging-header/paging-header.
 import { PagerComponent } from './components/pager/pager.component';
 import {CarouselModule} from "ngx-bootstrap/carousel";
 import { OrderTotalsComponent } from './components/order-totals/order-totals.component';
+import {ReactiveFormsModule} from "@angular/forms";
+import {BsDropdownModule} from "ngx-bootstrap/dropdown";
+import { TextInputComponent } from './components/text-input/text-input.component';
 
 
 
@@ -12,15 +15,19 @@ import { OrderTotalsComponent } from './components/order-totals/order-totals.com
   declarations: [
     PagingHeaderComponent,
     PagerComponent,
-    OrderTotalsComponent
+    OrderTotalsComponent,
+    TextInputComponent
   ],
   imports: [
     CommonModule,
-    // We need to add forRoot here as the pagination module has its own provider's array and those providers
+    // We need to add forRoot() here as the pagination module has its own provider's array and those providers
     // need to be injected into our routes module at startup. So this is effectively acting as a singleton anyway. And if we
-    // take off the four routes, then it won't load with its providers and will have errors.
+    // take off the four routes, then it won't load with its providers and will have errors. Or ngx-bootstrap components they
+    // typically add services inside the provider's for their modules which need to be injected into our application of start up.
     PaginationModule.forRoot(),
-    CarouselModule.forRoot()
+    CarouselModule.forRoot(),
+    BsDropdownModule.forRoot(),
+    ReactiveFormsModule
   ],
   exports: [
     PaginationModule,
@@ -28,7 +35,11 @@ import { OrderTotalsComponent } from './components/order-totals/order-totals.com
     PagerComponent,
     CarouselModule,
     // Because we want to use this in a different module, we also need to export this module.
-    OrderTotalsComponent
+    OrderTotalsComponent,
+    ReactiveFormsModule,
+    BsDropdownModule,
+    TextInputComponent
+
   ]
 })
 export class SharedModule { }

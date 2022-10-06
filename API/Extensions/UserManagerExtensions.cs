@@ -9,7 +9,7 @@ namespace API.Extensions
     {
         // This is going to allow us to use UserManager to get the user with their address instead of needing to inject the context
         // into our account controller.
-        public static async Task<AppUser> FindByUserClaimPrincipalWithAddressAsync(this UserManager<AppUser> input, ClaimsPrincipal user)
+        public static async Task<AppUser> FindByUserClaimsPrincipalWithAddressAsync(this UserManager<AppUser> input, ClaimsPrincipal user)
         {
             var email = user?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
 
