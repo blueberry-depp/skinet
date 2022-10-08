@@ -60,7 +60,7 @@ public class OrdersController : BaseApiController
 
         if (order == null) return NotFound(new ApiResponse(404));
 
-        return order;
+        return Ok(_mapper.Map<Order, OrderToReturnDto>(order));
     }
 
     // Client can use this in the checkout system.

@@ -4,6 +4,7 @@ import {environment} from "../../environments/environment";
 import {BehaviorSubject, map} from "rxjs";
 import {Basket, IBasket, IBasketItem, IBasketTotals} from "../shared/models/basket";
 import {IProduct} from "../shared/models/product";
+import {IDeliveryMethod} from "../shared/models/deliveryMethod";
 
 @Injectable({
   providedIn: 'root'
@@ -25,13 +26,23 @@ export class BasketService {
   private basketTotalSource = new BehaviorSubject<IBasketTotals>(null)
   basketTotal$ = this.basketTotalSource.asObservable()
 
+  shipping = 0
+
+
   constructor(private http: HttpClient) {
+  }
+
+  // Create a method to set the shipping price so we can use that from delivery component.
+  setShippingPrice(deliveryMethod: IDeliveryMethod) {
+    this.shipping = deliveryMethod.price
+    // Use calculate totals method to update what's inside  basketTotal$ observable.
+    this.calculateTotals()
   }
 
   // We're not subscribing to observable we get back from http client at this moment in time. What we're going to use to subscribe
   // is the async pipe that will make use of in the components that connect to this basket observable.
   getBasket(id: string) {
-    return this.http.get(`${(this.baseUrl)}basket?id=${id}`)
+    return this.http.get(`${this.baseUrl}basket?id=${id}`)
       // Now what we want to do is from the response that we get back from the http client which should contain basket then we
       // need to set our basket source with the basket we get back from the API. To achieve that we use the pipe rxjs method
       .pipe(map((basket: IBasket) => {
@@ -126,6 +137,14 @@ export class BasketService {
     }
   }
 
+  // Because we're removing the baskets from redis on the API when orders created successfully,
+  // we'll also need to remove the basket from client/local as well.
+  deleteLocalBasket(id: string) {
+    this.basketSource.next(null)
+    this.basketTotalSource.next(null)
+    localStorage.removeItem('basket_id')
+  }
+
   private deleteBasket(basket: IBasket) {
     return this.http.delete(`${(this.baseUrl)}basket?id=${basket.id}`).subscribe({
       next: () => {
@@ -143,7 +162,7 @@ export class BasketService {
   private calculateTotals() {
     // Get current basket.
     const basket = this.getCurrentBasketValue()
-    const shipping = 0
+    const shipping = this.shipping
     // The basket items is an array of items and some of them may have more than one in terms of the quantity and what we want to do is sum
     // these values together and reduce that into a single number that we can put into subtotal,
     // and one of the array methods is to reduce the array and what this does it call the specified callback function for all the elements in an array,

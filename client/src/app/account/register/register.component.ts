@@ -28,7 +28,7 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       displayName: [null, Validators.required],
       email: ['',
-        // This is synchronous validators these ones are going to happen instantly.
+        // This is synchronous validators, these are going to happen instantly.
         [Validators.required, Validators.pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')],
         // The asynchronous validators are only call if our synchronous validators have passed validation so we're not
         // going to be calling this as we're typing we're only going to call this when both of these validators

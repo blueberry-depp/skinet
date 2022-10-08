@@ -1,0 +1,14 @@
+<div class="mt-4">
+  <!-- We send up the Input property from checkout review component to the basket summary and set this to False
+  in the case of when we're using this inside anything other than the basket. -->
+  <app-basket-summary [isBasket]="false"></app-basket-summary>
+</div>
+
+<div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
+  <button class="btn btn-outline-primary" cdkStepperPrevious>
+    <i class="fa fa-angle-left"></i> Back to Delivery
+  </button>
+  <button class="btn btn-primary" cdkStepperNext>
+    Go to Payment <i class="fa fa-angle-right"></i>
+  </button>
+</div>

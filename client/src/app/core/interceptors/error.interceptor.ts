@@ -58,7 +58,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (error.status === 500) {
             // And if we've got an error status of 500 then we pass the exception information to server error component. And since
             // Angular 7.2 we've been able to pass state to the routes that we're about to navigate to and in order to do this we're
-            // gonna pass it through something called navigation extras.
+            // going to pass it through something called navigation extras.
             // error.error: exception that we get back from our API
             const navigationExtras: NavigationExtras = {state: {error: error.error}}
             // Pass in the navigationExtras as the states
